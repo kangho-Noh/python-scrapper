@@ -6,9 +6,11 @@ URL = "https://stackoverflow.com/jobs"
 
 
 def get_last_page():
-    result = requests.get(URL)
+    result = requests.get(f"{URL}?q=python")
     soup = BeautifulSoup(result.text, "html.parser")
     pagination = soup.find("div", {"class": "s-pagination"}).find_all("a")
+    print("last page")
+    print(pagination[-2])
     return int(pagination[-2].find("span").text)
 
 
@@ -28,7 +30,7 @@ def extract_jobs(last_page):
     jobs = []
     for page in range(last_page):
         print(f"Scrapping SO: Page:{page}")
-        result = requests.get(f"{URL}?q=python&pg{page+1}")
+        result = requests.get(f"{URL}?q=python&pg={page+1}")
         soup = BeautifulSoup(result.text, "html.parser")
         results = soup.find_all("div", {"class": "-job"})
         for r in results:
